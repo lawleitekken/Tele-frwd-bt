@@ -15,7 +15,6 @@ from translation import Translation
 
 START_TIME = datetime.datetime.now()
 
-# Define main menu buttons once to avoid repetition
 main_buttons = [
     [
         InlineKeyboardButton("🛡️ sᴛᴀꜰꜰ ᴀᴄᴄᴇss", url="https://t.me/Hayato_ku"),
@@ -27,7 +26,6 @@ main_buttons = [
     ]
 ]
 
-# Helper for background sticker deletion
 async def delete_after_delay(msg, delay):
     await asyncio.sleep(delay)
     try:
@@ -63,9 +61,8 @@ async def start(client: Client, message: Message):
                 await message.reply_text("<b>You are banned from using this bot.</b>")
                 return
         except Exception:
-            # If user is not in channel, an exception is raised
             f_sub = str(Config.FORCE_SUB_CHANNEL)
-            invite_link = f_sub if "t.me" in f_sub else f"https://t.me/{f_sub.replace('@', '')}"
+            invite_link = f_sub if "t.me" in f_sub else f"https://t.me/{f_sub.replace('@', '').replace('-100', '')}"
             
             join_button = [
                 [InlineKeyboardButton("ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ", url=invite_link)],
@@ -80,14 +77,14 @@ async def start(client: Client, message: Message):
     # 2. Database & Logging Logic
     if not await db.is_user_exist(user.id):
         await db.add_user(user.id, user.first_name)
-        # Log to private channel
         await client.send_message(
             chat_id=Config.LOG_CHANNEL,
             text=f"#NewUser\n\n<b>ID:</b> <code>{user.id}</code>\n<b>Name:</b> {user.mention}"
         )
 
-    # 3. Sticker Logic (Non-blocking)
+    # 3. Sticker Logic (Non-blocking Task)
     try:
+        # Use your custom sticker ID here
         sticker_msg = await message.reply_sticker("CAACAgUAAxkBAAEQLstpXRZxNxFMteYSkppBZ63fuBhVtQACFBgAAtDQQVbGUaezY8jttzgE")
         asyncio.create_task(delete_after_delay(sticker_msg, 2))
     except Exception:
@@ -95,18 +92,17 @@ async def start(client: Client, message: Message):
 
     # 4. Final Welcome Message
     await message.reply_text(
-        text=Translation.START_TXT.format(user.first_name),
+        text=Translation.START_TXT.format(user.mention),
         reply_markup=InlineKeyboardMarkup(main_buttons),
         quote=True
     )
 
 #==================Restart Function==================#
 
-@Client.on_message(filters.private & filters.command(['restart']) & filters.user(Config.BOT_OWNER_ID))
+@Client.on_message(filters.private & filters.command(['restart', 'r']) & filters.user(Config.BOT_OWNER_ID))
 async def restart_bot(client: Client, message: Message):
     msg = await message.reply_text("<i>ᴛʀʏɪɴɢ ᴛᴏ ʀᴇsᴛᴀʀᴛ sᴇʀᴠᴇʀ...</i>")
     await asyncio.sleep(2)
-    await msg.edit("<i>sᴇʀᴠᴇʀ ʀᴇsᴛᴀʀᴛᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ ✅</i>")
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 #==================Callback Functions==================#
@@ -117,7 +113,7 @@ async def callback_handler(client: Client, query: CallbackQuery):
     
     if data == "back":
         await query.message.edit_text(
-            text=Translation.START_TXT.format(query.from_user.first_name),
+            text=Translation.START_TXT.format(query.from_user.mention),
             reply_markup=InlineKeyboardMarkup(main_buttons)
         )
         
@@ -143,7 +139,7 @@ async def callback_handler(client: Client, query: CallbackQuery):
 
     elif data == "about":
         await query.message.edit_text(
-            text=Translation.ABOUT_TXT,
+            text=Translation.ABOUT_TXT.format(client.me.mention),
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('• ʙᴀᴄᴋ', callback_data='back')]]),
             disable_web_page_preview=True,
             parse_mode=enums.ParseMode.HTML
@@ -173,10 +169,8 @@ async def callback_handler(client: Client, query: CallbackQuery):
             parse_mode=enums.ParseMode.HTML
         )
 
-#===================Donate Function===================#
-
 @Client.on_message(filters.private & filters.command(['donate']))
 async def donate_cmd(client: Client, message: Message):
     await message.reply_text(
-        text="<i>__If you liked my service❤__.\n\nConsider and make a donation to support my developer 👦\n\n\n ID - `@DmOwner`</i>"
+        text="<i><b>Support Development</b>\n\nIf you like my service, consider donating.\nContact: @DmOwner</i>"
     )
