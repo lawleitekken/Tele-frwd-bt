@@ -1,36 +1,17 @@
-import os
+
+from os import environ 
 from config import Config
 import motor.motor_asyncio
 from pymongo import MongoClient
-from pymongo.errors import ConfigurationError
 
-# Helper to check MongoDB version
 async def mongodb_version():
-    # Defensive check: Ensure URI exists
-    uri = Config.DATABASE_URI or os.environ.get("DATABASE_URI")
-    if not uri:
-        return "Unknown (No URI)"
-    x = MongoClient(uri)
-    try:
-        version = x.server_info()['version']
-        return version
-    except Exception:
-        return "Connection Error"
+    x = MongoClient(Config.DATABASE_URI)
+    mongodb_version = x.server_info()['version']
+    return mongodb_version
 
 class Database:
+    
     def __init__(self, uri, database_name):
-        # --- CRITICAL FIX START ---
-        if not uri:
-            # Try to grab it directly from environment as a backup
-            uri = os.environ.get("DATABASE_URI")
-            
-        if not uri:
-            print("❌ ERROR: DATABASE_URI is missing!")
-            print("Ensure you have added 'DATABASE_URI' in Render/Heroku Config Vars.")
-            # We raise a more descriptive error here
-            raise ValueError("DATABASE_URI is empty. The bot cannot start without a database.")
-        # --- CRITICAL FIX END ---
-
         self._client = motor.motor_asyncio.AsyncIOMotorClient(uri)
         self.db = self._client[database_name]
         self.bot = self.db.bots
@@ -47,7 +28,8 @@ class Database:
                 ban_reason="",
             ),
         )
-
+    
+                
     async def add_user(self, id, name):
         user = self.new_user(id, name)
         await self.col.insert_one(user)
@@ -172,9 +154,8 @@ class Database:
      
     async def get_filters(self, user_id):
        filters = []
-       config_data = await self.get_configs(user_id)
-       filter_dict = config_data.get('filters', {})
-       for k, v in filter_dict.items():
+       filter = (await self.get_configs(user_id))['filters']
+       for k, v in filter.items():
           if v == False:
             filters.append(str(k))
        return filters
@@ -188,6 +169,6 @@ class Database:
     
     async def get_all_frwd(self):
        return self.nfy.find({})
-
-# Initialization
+       
+    
 db = Database(Config.DATABASE_URI, Config.DATABASE_NAME)
