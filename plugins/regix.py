@@ -62,8 +62,8 @@ async def pub_(bot, message):
 # === SPEED OPTIMIZATION (SAFETY-ADJUSTED) START ===
     # Using 1.0s for bots to respect the 1 msg/sec per-chat limit.
     # Using 0.1s for users to remain fast but avoid spam triggers.
-    sleep = 1.0 if _bot['is_bot'] else 0.1  
-    batch_sleep = 2.5 if _bot['is_bot'] else 1.0 
+    sleep = 1.0 if _bot['is_bot'] else 0.25  
+    batch_sleep = 3.0 if _bot['is_bot'] else 1.0 
     # === SPEED OPTIMIZATION END ===
 
     await msg_edit(m, "<code>ᴘʀᴏᴄᴇssɪɴɢ ...</code>")
@@ -167,17 +167,14 @@ async def forward(bot, msg, m, sts, protect):
      await forward(bot, msg, m, sts, protect)
 
 PROGRESS = """
-📈 ᴘᴇʀᴄᴇɴᴛᴀɢᴇ : {0} %
-
-⭕ ғᴇᴛᴄʜᴇᴅ : {1}
-
-⚙️ ғᴏʀᴡᴀʀᴅᴇᴅ : {2}
-
-🗞️ ʀᴇᴍᴀɴɪɴɢ : {3}
-
-♻️ sᴛᴀᴛᴜs : {4}
-
-⏳️ ᴇᴛᴀ : {5}
+╭── 📊 Transfer Status ──╮
+│ 📈 {0}% Completed
+│ 📥 Fetched   : {1}
+│ 🚀 Sent      : {2}
+│ ⏳ Left      : {3}
+│ ⚡ Status    : {4}
+│ ⏱️ ETA       : {5}
+╰──────────────────────╯
 """
 
 async def msg_edit(msg, text, button=None, wait=None):
