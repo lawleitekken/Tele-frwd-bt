@@ -3,15 +3,12 @@ import os
 from config import Config
 
 class Translation(object):
-> **👋 Greetings {}!**
+  START_TXT = """<b>ʜɪ {}
 
-> **🚀 ɪɴᴛʀᴏᴅᴜᴄɪɴɢ ᴛʜᴇ ᴜʟᴛɪᴍᴀᴛᴇ ᴄᴏɴᴛᴇɴᴛ ᴍɪʀʀᴏʀɪɴɢ sʏsᴛᴇᴍ.**
-  
-> **◈ ᴇꜰꜰᴏʀᴛʟᴇssʟʏ ᴛʀᴀɴsᴍɪᴛ ᴍᴇssᴀɢᴇs ᴀᴄʀᴏss ᴄʜᴀɴɴᴇʟs ɪɴ ʀᴇᴀʟ-ᴛɪᴍᴇ.**
-> **◈ ʙᴜɪʟᴛ ꜰᴏʀ sᴘᴇᴇᴅ, ᴘʀᴇᴄɪsɪᴏɴ, ᴀɴᴅ ᴛᴏᴛᴀʟ ᴀᴜᴛᴏᴍᴀᴛɪᴏɴ.**
+ɪ'ᴍ ᴀ ᴀᴅᴠᴀɴᴄᴇᴅ ᴀᴜᴛᴏ ꜰᴏʀᴡᴀʀᴅ ʙᴏᴛ
+ɪ ᴄᴀɴ ꜰᴏʀᴡᴀʀᴅ ᴀʟʟ ᴍᴇssᴀɢᴇ ꜰʀᴏᴍ ᴏɴᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴀɴᴏᴛʜᴇʀ ᴄʜᴀɴɴᴇʟ
 
-**✨ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅʜᴀɴᴘᴀʟ sʜᴀʀᴍᴀ**
-"""
+ᴄʟɪᴄᴋ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ᴛᴏ ᴋɴᴏᴡ ᴍᴏʀᴇ ᴀʙᴏᴜᴛ ᴍᴇ</b>"""
 
 
   DONATE_TXT = """<b><i>If you liked me ❤️. consider make a donation to support my developer 👦
