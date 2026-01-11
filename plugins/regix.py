@@ -63,7 +63,7 @@ async def pub_(bot, message):
     # Using 1.0s for bots to respect the 1 msg/sec per-chat limit.
     # Using 0.1s for users to remain fast but avoid spam triggers.
     sleep = 1.0 if _bot['is_bot'] else 0.25  
-    batch_sleep = 3.0 if _bot['is_bot'] else 1.0 
+    batch_sleep = 3.0 if _bot['is_bot'] else 5.0 
     # === SPEED OPTIMIZATION END ===
 
     await msg_edit(m, "<code>ᴘʀᴏᴄᴇssɪɴɢ ...</code>")
